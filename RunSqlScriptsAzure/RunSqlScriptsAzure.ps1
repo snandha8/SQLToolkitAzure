@@ -32,7 +32,8 @@ Try {
 
     Write-Host "Running all scripts in $pathToScripts";
 
-    foreach ($sqlScript in Get-ChildItem -path "$pathToScripts" -Filter *.sql | sort-object) {	
+    foreach ($sqlScript in [System.Linq.Enumerable]::OrderBy(Get-ChildItem -path "$pathToScripts" -Filter *.sql | sort-object, [Func[object, int]]{ param($x) [int]($x.Name -replace '(\d+)_(.*)','$1') })
+) {	
         Write-Host "Running Script " $sqlScript.Name
 		
         #Execute the query
